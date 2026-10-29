@@ -24,5 +24,13 @@
     "standardwebhooks": "^1.1.1",
     "stream-chat": "^9.54.3",
     "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.6",
+    "@types/pg": "^8.23.1",
+    "drizzle-kit": "^0.31.11",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   }
 }
