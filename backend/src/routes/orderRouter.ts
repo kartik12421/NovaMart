@@ -4,7 +4,7 @@ import {
   createVideoInvite,
   getOrder,
   listOrders,
-} from "../../../../../novamart/northwind-store/backend/src/controllers/orderController.js";
+} from "../controllers/orderController.js";
 
 const router = Router();
 

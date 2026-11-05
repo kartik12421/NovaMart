@@ -1,26 +1,29 @@
-import "dotenv/config";
+import "./lib/loadEnv.js";
 import express from "express";
 import cors from "cors";
 
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import * as Sentry from "@sentry/node";
 
 import { clerkMiddleware } from "@clerk/express";
-import { clerkWebhookHandler } from "./webhooks/clerk";
-import { getEnv } from "./lib/env";
-import keepAliveCronfrom "./lib/cron";
+import { clerkWebhookHandler } from "./webhooks/clerk.js";
+import { getEnv } from "./lib/env.js";
+import keepAliveCron from "./lib/cron.js";
 
-import productRouter from "./routes/productRouter";
-import meRouter from "./routes/meRouter";
-import streamRouter from "./routes/streamRouter";
-import chekoutRouter from "./routes/chekoutRouter";
-import adminRouter from "./routes/adminRouter";
-import orderRouter from "./routes/orderRouter";
+import productRouter from "./routes/productRouter.js";
+import meRouter from "./routes/meRouter.js";
+import streamRouter from "./routes/streamRouter.js";
+import chekoutRouter from "./routes/chekoutRouter.js";
+import adminRouter from "./routes/adminRouter.js";
+import orderRouter from "./routes/orderRouter.js";
 
-import { polarWebhookHandler } from "./webhooks/polar";
-import { sentryClerkUserMiddleware } from "./middleware/sentryClerkUser";
+import { polarWebhookHandler } from "./webhooks/polar.js";
+import { sentryClerkUserMiddleware } from "./middleware/sentryClerkUser.js";
+
+const moduleDir = path.dirname(fileURLToPath(import.meta.url));
 
 const env = getEnv();
 const app = express();
@@ -51,7 +54,9 @@ app.use("/api/checkout", chekoutRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/orders", orderRouter);
 
-const publicDir = path.join(process.cwd(), "public");
+const publicDir = path.resolve(
+  process.env.PUBLIC_DIR ?? path.resolve(moduleDir, "../../frontend/dist"),
+);
 if (fs.existsSync(publicDir)) {
   app.use(express.static(publicDir));
 

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createCheckout } from "../../../../../novamart/northwind-store/backend/src/controllers/checkoutController.js";
+import { createCheckout } from "../controllers/checkoutController.js";
 
 const router = Router();
 

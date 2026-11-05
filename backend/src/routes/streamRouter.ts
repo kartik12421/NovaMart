@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createStreamToken } from "../../../../../novamart/northwind-store/backend/src/controllers/streamController.js";
+import { createStreamToken } from "../controllers/streamController.js";
 
 const router = Router();
 

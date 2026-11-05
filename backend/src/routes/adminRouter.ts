@@ -6,7 +6,7 @@ import {
   listAdminProducts,
   requireAdmin,
   updateAdminProduct,
-} from "../../../../../novamart/northwind-store/backend/src/controllers/adminController.js";
+} from "../controllers/adminController.js";
 
 const router = Router();
 
