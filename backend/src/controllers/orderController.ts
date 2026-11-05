@@ -241,10 +241,8 @@ export async function createVideoInvite(req: Request, res: Response, next: NextF
     await channel.sendMessage({
       text: `Video call — tap Join below (same link for everyone): ${joinUrl}`,
       user_id: staffStreamUserId,
-      custom: {
-        video_invite: true,
-        join_url: joinUrl,
-      },
+      video_invite: true,
+      join_url: joinUrl,
     });
 
     res.json({ ok: true, joinUrl });
