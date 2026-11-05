@@ -26,6 +26,7 @@ RUN npm install --no-audit --no-fund \
 FROM node:22-bookworm-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+ENV PUBLIC_DIR=/app/public
 
 COPY backend/package.json backend/package-lock.json ./
 RUN npm install --omit=dev --no-audit --no-fund && npm cache clean --force
