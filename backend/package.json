@@ -4,10 +4,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch --import ./src/instrument.ts ./src/index.ts",
+    "dev": "tsx watch --import ./src/instrument.ts src/index.ts",
     "build": "tsc",
     "start": "node --import ./src/instrument.ts dist/index.js",
-    "push:db": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "db:seed": "tsx scripts/seed.ts"
   },
   "keywords": [],
   "author": "Kartik Joshi",

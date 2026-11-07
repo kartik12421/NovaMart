@@ -12,6 +12,11 @@ function App() {
           <UserButton />
         </Show>
       </header>
+
+      <p className="text-red-500 font-bold text-4xl bg-blue">Hey...</p>
+      <button className="btn btn-neutral">Submit</button>
+      <button className="btn btn-primary">Submit</button>
+      <button className="btn btn-info">Submit</button>
     </>
   );
 }
