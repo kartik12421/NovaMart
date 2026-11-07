@@ -1,4 +1,7 @@
 import "./lib/loadEnv.js";
+// Must stay first: retries failed DNS lookups through a public resolver (some routers
+// refuse to resolve the database host, which otherwise breaks every query).
+import "./lib/dnsPatch.js";
 import express from "express";
 import cors from "cors";
 
