@@ -11,7 +11,10 @@ import {
 } from "lucide-react";
 import { formatOrderWhen, formatPrice } from "../utils/format";
 
-const tabClass = ({ isActive }) => `tab gap-2 whitespace-nowrap ${isActive ? "tab-active" : ""}`;
+const tabClass = ({ isActive }) =>
+  `tab gap-2 whitespace-nowrap font-mono text-[11px] font-bold uppercase tracking-[0.14em] ${
+    isActive ? "tab-active" : ""
+  }`;
 
 function OrderDetailPage() {
   const { id, order, items, paid, isLoading, error } = useOrderDetailPage();
@@ -30,33 +33,35 @@ function OrderDetailPage() {
     <div className="space-y-8 text-left">
       <Link
         to="/orders"
-        className="btn btn-ghost btn-sm gap-2 px-0 text-base-content/70 hover:text-primary"
+        className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-base-content/55 transition-colors hover:text-primary"
       >
         <ArrowLeftIcon className="size-4" aria-hidden />
         Back to orders
       </Link>
 
-      <div className="overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-lg">
-        <div className="bg-linear-to-br from-primary/12 via-base-100 to-base-200/90 px-5 py-6 sm:px-8 sm:py-8">
+      <div className="border-2 border-base-300 bg-base-100">
+        <div className="border-l-4 border-primary px-5 py-6 sm:px-8 sm:py-8">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+              <p className="font-mono text-[11px] font-medium uppercase tracking-[0.3em] text-primary">
                 Order details
               </p>
 
-              <h1 className="mt-1 font-mono text-2xl font-bold tracking-tight text-base-content sm:text-3xl">
+              <h1 className="mt-2 font-mono text-2xl font-bold tracking-tight text-base-content sm:text-3xl">
                 #{order.id.slice(0, 8)}
               </h1>
 
-              <p className="mt-2 text-sm text-base-content/70">
+              <p className="mt-2 font-mono text-xs uppercase tracking-[0.15em] text-base-content/60">
                 {formatOrderWhen(order.createdAt, { dateStyle: "full" })}
               </p>
-              <p className="mt-2 break-all font-mono text-xs text-base-content/45">{order.id}</p>
+              <p className="mt-2 break-all font-mono text-[11px] text-base-content/40">
+                {order.id}
+              </p>
             </div>
 
-            <div className="flex flex-col gap-3 border-t border-base-300/80 pt-4 lg:border-t-0 lg:pt-0 lg:text-right">
+            <div className="flex flex-col gap-3 border-t-2 border-base-300 pt-4 lg:border-t-0 lg:pt-0 lg:text-right">
               <span
-                className={`badge badge-lg w-fit capitalize lg:ml-auto ${
+                className={`badge badge-lg w-fit font-mono uppercase tracking-widest lg:ml-auto ${
                   paid
                     ? "badge-success"
                     : order.status === "pending"
@@ -68,10 +73,10 @@ function OrderDetailPage() {
               </span>
 
               <div>
-                <p className="text-xs font-medium uppercase tracking-wide text-base-content/50">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-base-content/45">
                   Order total
                 </p>
-                <p className="text-2xl font-bold tabular-nums text-base-content sm:text-3xl">
+                <p className="font-mono text-2xl font-bold tabular-nums text-base-content sm:text-3xl">
                   {formatPrice(order.totalCents, "usd")}
                 </p>
               </div>
@@ -79,7 +84,7 @@ function OrderDetailPage() {
           </div>
         </div>
 
-        <div className="border-t border-base-300 bg-base-200/40 px-5 py-4 sm:px-8">
+        <div className="border-t-2 border-base-300 bg-base-200/60 px-5 py-4 sm:px-8">
           <p className="max-w-3xl text-sm leading-relaxed text-base-content/80">
             Need help with shipping or returns? Open the{" "}
             <strong className="text-base-content">Support chat</strong> tab after payment. Video
@@ -89,14 +94,14 @@ function OrderDetailPage() {
       </div>
 
       <div>
-        <div className="flex items-center gap-2 border-b border-base-300 pb-3">
-          <HeadphonesIcon className="size-5 text-primary" aria-hidden />
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-base-content">
+        <div className="flex items-center gap-2 border-b-2 border-base-300 pb-3">
+          <HeadphonesIcon className="size-4 text-primary" aria-hidden />
+          <h2 className="font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-base-content">
             Customer support
           </h2>
         </div>
 
-        <div className="tabs tabs-boxed mt-3 w-fit flex-wrap bg-base-300/50 p-1">
+        <div className="tabs tabs-boxed mt-3 w-fit flex-wrap p-1">
           <NavLink to={`/orders/${id}`} end className={tabClass}>
             <LayoutListIcon className="size-4 shrink-0" aria-hidden />
             Summary

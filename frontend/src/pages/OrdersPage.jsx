@@ -1,6 +1,7 @@
-import { ChevronRightIcon, PackageIcon } from "lucide-react";
+import { ChevronRightIcon } from "lucide-react";
 import { OrdersListSkeleton } from "../components/LoadingSkeletons";
 import { PageError } from "../components/PageError";
+import { PageHeader } from "../components/PageHeader";
 import useOrdersPage from "../hooks/useOrdersPage";
 import { Link } from "react-router";
 import { OrderPreview } from "../components/OrderPreview";
@@ -12,7 +13,8 @@ function OrdersPage() {
   if (isLoading) {
     return (
       <div className="text-left">
-        <div className="skeleton mb-2 h-10 w-64 max-w-full" />
+        <div className="skeleton mb-2 h-4 w-32" />
+        <div className="skeleton mb-3 h-10 w-64 max-w-full" />
         <div className="skeleton mb-8 h-4 w-96 max-w-full" />
         <OrdersListSkeleton />
       </div>
@@ -27,24 +29,28 @@ function OrdersPage() {
 
   return (
     <div className="text-left">
-      <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-base-content">
-        <PackageIcon className="size-8 text-primary" aria-hidden />
-        {staff ? "Orders" : "Your orders"}
-      </h1>
-
-      <p className="mb-8 text-sm text-base-content/70">
-        {staff
-          ? "All store orders. Open one for customer support chat."
-          : "Paid orders include customer support: open an order for chat."}
-      </p>
+      <PageHeader
+        index="04 / Orders"
+        title={staff ? "Orders" : "Your orders"}
+        note={
+          staff
+            ? "All store orders. Open one for customer support chat."
+            : "Paid orders include customer support: open an order for chat."
+        }
+      />
 
       {orders.length === 0 ? (
-        <p className="text-base-content/70">
-          No orders yet.{" "}
-          <Link to="/" className="link link-primary">
+        <div className="border-2 border-dashed border-base-300 px-6 py-16 text-center">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-base-content/50">
+            No orders yet.
+          </p>
+          <Link
+            to="/"
+            className="mt-5 inline-flex border-2 border-base-300 px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.14em] text-base-content transition-colors hover:border-primary hover:bg-primary hover:text-primary-content"
+          >
             Browse the shop
           </Link>
-        </p>
+        </div>
       ) : (
         <ul className="space-y-4">
           {orders.map((o) => {
@@ -62,11 +68,13 @@ function OrdersPage() {
               <li key={o.id}>
                 <Link
                   to={`/orders/${o.id}`}
-                  className="group card border border-base-300 bg-base-100 shadow-sm transition hover:border-primary/45 hover:shadow-md"
+                  className="group flex border-2 border-base-300 bg-base-100 transition-colors hover:border-primary"
                 >
-                  <div className="card-body flex-row flex-wrap items-center gap-4 py-5 sm:gap-5">
+                  <div className="hidden shrink-0 items-center border-r-2 border-base-300 p-4 sm:flex">
                     <OrderPreview items={previewItems} />
+                  </div>
 
+                  <div className="flex min-w-0 flex-1 flex-wrap items-center gap-4 py-4 pl-4 pr-4 sm:gap-5 sm:pl-5">
                     <div className="flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="font-mono text-xs text-base-content/55 sm:text-sm">
@@ -74,7 +82,7 @@ function OrdersPage() {
                         </span>
 
                         <span
-                          className={`badge badge-sm capitalize ${
+                          className={`badge badge-sm font-mono uppercase tracking-widest ${
                             o.status === "paid"
                               ? "badge-success"
                               : o.status === "pending"
@@ -86,7 +94,7 @@ function OrdersPage() {
                         </span>
                       </div>
 
-                      <p className="mt-1 text-sm text-base-content/60">
+                      <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.15em] text-base-content/50">
                         {formatOrderWhen(o.createdAt)}
                       </p>
 
@@ -95,7 +103,7 @@ function OrdersPage() {
 
                     <div className="flex shrink-0 items-center gap-3">
                       <div className="text-right">
-                        <p className="text-xs font-medium uppercase tracking-wide text-base-content/50">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-base-content/45">
                           Total
                         </p>
                         <p className="text-lg font-bold tabular-nums text-base-content sm:text-xl">

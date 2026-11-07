@@ -1,6 +1,151 @@
 @import "tailwindcss";
 /* @plugin "daisyui"; */
 
+/* ------------------------------------------------------------------ *
+ * NOVAMART "brutal" — dark brutalist tech theme
+ * near-black canvas, hairline-free hard borders, zero radius,
+ * safety-orange primary + cyan secondary, no depth / no noise
+ * ------------------------------------------------------------------ */
+
 @plugin "daisyui" {
-  themes: forest --default;
+  themes: brutal --default;
+}
+
+@plugin "daisyui/theme" {
+  name: "brutal";
+  color-scheme: dark;
+
+  --color-base-100: oklch(0.145 0.002 270);
+  --color-base-200: oklch(0.185 0.003 270);
+  --color-base-300: oklch(0.255 0.006 270);
+  --color-base-content: oklch(0.93 0.004 95);
+
+  --color-primary: oklch(0.7 0.19 41);
+  --color-primary-content: oklch(0.145 0.002 270);
+  --color-secondary: oklch(0.85 0.11 225);
+  --color-secondary-content: oklch(0.145 0.002 270);
+  --color-accent: oklch(0.9 0.18 125);
+  --color-accent-content: oklch(0.145 0.002 270);
+  --color-neutral: oklch(0.21 0.004 270);
+  --color-neutral-content: oklch(0.93 0.004 95);
+
+  --color-info: oklch(0.75 0.12 240);
+  --color-info-content: oklch(0.145 0.002 270);
+  --color-success: oklch(0.79 0.17 155);
+  --color-success-content: oklch(0.145 0.002 270);
+  --color-warning: oklch(0.83 0.14 75);
+  --color-warning-content: oklch(0.145 0.002 270);
+  --color-error: oklch(0.7 0.18 25);
+  --color-error-content: oklch(0.145 0.002 270);
+
+  --radius-selector: 0rem;
+  --radius-field: 0rem;
+  --radius-box: 0rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scrollbar-color: var(--color-base-300) var(--color-base-100);
+  }
+
+  body {
+    font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    background-color: var(--color-base-100);
+    color: var(--color-base-content);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-primary);
+    color: var(--color-primary-content);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* form labels read like equipment markings */
+  .label-text {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+}
+
+/* --- brutal utilities --------------------------------------------- */
+
+/* faint blueprint grid behind the whole app */
+.bg-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-base-300) 50%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-base-300) 50%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 44px 44px;
+}
+
+/* solid offset shadows that snap on hover */
+.btn-brutal {
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.btn-brutal:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 0 #000;
+}
+
+/* scrolling spec ticker */
+@keyframes nm-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  animation: nm-marquee 30s linear infinite;
+}
+
+.ticker:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+  .btn-brutal:hover {
+    transform: none;
+  }
 }

@@ -3,24 +3,32 @@ import { Link } from "react-router";
 
 export default function EmptyCart() {
   return (
-    <div className="mx-auto max-w-lg rounded-2xl border border-dashed border-base-300 bg-linear-to-b from-base-200/50 to-base-100 px-6 py-12 text-center sm:px-10 sm:py-16">
-      <div className="mx-auto mb-6 flex size-20 items-center justify-center rounded-full bg-base-300/60 text-primary/80 ring-4 ring-base-200/80">
-        <ShoppingCartIcon className="size-10" aria-hidden />
+    <div className="mx-auto max-w-lg border-2 border-dashed border-base-300 bg-base-100 px-6 py-14 text-center sm:px-10 sm:py-16">
+      <div className="mx-auto mb-6 flex size-16 items-center justify-center border-2 border-base-300 bg-base-200 text-primary">
+        <ShoppingCartIcon className="size-8" aria-hidden />
       </div>
-      <h2 className="text-xl font-semibold tracking-tight text-base-content sm:text-2xl">
+
+      <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary">03 / Empty</p>
+
+      <h2 className="mt-3 text-2xl font-bold uppercase tracking-tight sm:text-3xl">
         Your cart is empty
       </h2>
-      <p className="mt-2 text-sm leading-relaxed text-base-content/65">
+
+      <p className="mt-3 text-sm leading-relaxed text-base-content/60">
         When you add products from the catalog, they&apos;ll show up here. Ready when you are.
       </p>
+
       <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
-        <Link to="/#catalog" className="btn btn-primary gap-2 shadow-md">
+        <Link
+          to="/#catalog"
+          className="btn-brutal inline-flex items-center justify-center gap-2 border-2 border-primary bg-primary px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.14em] text-primary-content hover:bg-transparent hover:text-primary"
+        >
           Browse catalog
           <ArrowRightIcon className="size-4" aria-hidden />
         </Link>
         <Link
           to="/orders"
-          className="btn btn-ghost gap-2 border border-white bg-base-100 hover:border-primary/35 hover:bg-base-200/50"
+          className="btn-brutal inline-flex items-center justify-center gap-2 border-2 border-base-300 px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.14em] text-base-content hover:border-base-content"
         >
           <PackageIcon className="size-4" aria-hidden />
           View orders

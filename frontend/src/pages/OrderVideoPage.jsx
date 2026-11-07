@@ -45,7 +45,7 @@ function OrderVideoPage() {
 
   if (!client || !call) {
     return (
-      <div className="flex min-h-120 items-center justify-center rounded-box border border-base-300 bg-base-100">
+      <div className="flex min-h-120 items-center justify-center border-2 border-base-300 bg-base-100">
         <span className="loading loading-spinner loading-lg text-primary" />
       </div>
     );
@@ -53,21 +53,24 @@ function OrderVideoPage() {
 
   return (
     <div className="space-y-4 text-left">
-      <Link to={`/orders/${id}/chat`} className="btn btn-ghost btn-sm gap-2 text-base-content/80">
+      <Link
+        to={`/orders/${id}/chat`}
+        className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-base-content/55 transition-colors hover:text-primary"
+      >
         <ArrowLeftIcon className="size-4" aria-hidden />
         Back to support chat
       </Link>
 
-      <div className="card border border-base-300 bg-base-100 shadow-sm">
-        <div className="card-body flex-row items-start gap-4">
-          <div className="avatar placeholder">
-            <div className="w-12 rounded-box bg-secondary/20 text-secondary flex items-center justify-center">
-              <VideoIcon className="size-6" aria-hidden />
-            </div>
+      <div className="border-2 border-base-300 bg-base-100">
+        <div className="flex items-start gap-4 p-5">
+          <div className="flex size-12 shrink-0 items-center justify-center bg-secondary text-secondary-content">
+            <VideoIcon className="size-6" aria-hidden />
           </div>
           <div>
-            <h1 className="card-title text-lg">Video call</h1>
-            <p className="text-sm text-base-content/70">
+            <h1 className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-base-content">
+              Video call
+            </h1>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-base-content/70">
               Same room as the invite link in chat. Allow camera and microphone when your browser
               asks.
             </p>
@@ -75,7 +78,7 @@ function OrderVideoPage() {
         </div>
       </div>
 
-      <div className="flex min-h-130 flex-col overflow-hidden rounded-box border border-base-300 bg-base-100">
+      <div className="flex min-h-130 flex-col overflow-hidden border-2 border-base-300 bg-base-100">
         <StreamVideo client={client}>
           <StreamCall call={call}>
             <StreamTheme className="str-video__theme-custom">
@@ -83,7 +86,7 @@ function OrderVideoPage() {
                 <div className="relative min-h-105 flex-1 bg-neutral text-neutral-content">
                   <SpeakerLayout />
                 </div>
-                <div className="shrink-0 border-t border-base-300 bg-base-200/90 px-2 py-3 [&_.str-video__call-controls]:flex-wrap [&_.str-video__call-controls]:justify-center">
+                <div className="shrink-0 border-t-2 border-base-300 bg-base-200 px-2 py-3 [&_.str-video__call-controls]:flex-wrap [&_.str-video__call-controls]:justify-center">
                   <CallControls onLeave={() => navigate(`/orders/${id}/chat`)} />
                 </div>
               </div>

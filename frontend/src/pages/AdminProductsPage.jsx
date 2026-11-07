@@ -1,9 +1,13 @@
 import { useAdminProductsPage } from "../hooks/useAdminProductsPage.js";
 import { AdminProductsTableSkeleton } from "../components/LoadingSkeletons.jsx";
 import { IK_PRESETS, imageKitOptimizedUrl } from "../lib/imagekitUrl.js";
-import { PackageIcon, PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { Navigate } from "react-router";
+import { PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { formatPrice } from "../utils/format.js";
 import { AdminProductForm } from "../components/AdminProductForm.jsx";
+
+const thClass =
+  "font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-base-content/50";
 
 function AdminProductsPage() {
   const {
@@ -31,17 +35,22 @@ function AdminProductsPage() {
 
   return (
     <div className="text-left">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <PackageIcon className="size-8 text-secondary" aria-hidden />
-          <div>
-            <h1 className="text-2xl font-bold text-base-content">Products</h1>
-            <p className="text-sm text-base-content/60">Manage catalog (admin only).</p>
-          </div>
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b-2 border-base-300 pb-5">
+        <div>
+          <p className="font-mono text-[11px] font-medium uppercase tracking-[0.3em] text-secondary">
+            05 / Admin
+          </p>
+          <h1 className="mt-2 text-3xl font-bold uppercase leading-none tracking-tight md:text-4xl">
+            Products
+          </h1>
+          <p className="mt-3 font-mono text-xs uppercase tracking-[0.15em] text-base-content/55">
+            Manage catalog (admin only)
+          </p>
         </div>
+
         <button
           type="button"
-          className="btn btn-primary btn-sm gap-2"
+          className="btn-brutal inline-flex items-center gap-2 border-2 border-primary bg-primary px-4 py-2.5 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-primary-content hover:bg-transparent hover:text-primary"
           onClick={() => {
             setEditing(null);
             setModalOpen(true);
@@ -55,16 +64,16 @@ function AdminProductsPage() {
       {isLoading ? (
         <AdminProductsTableSkeleton />
       ) : (
-        <div className="overflow-x-auto rounded-box border border-base-300 bg-base-100">
+        <div className="overflow-x-auto border-2 border-base-300 bg-base-100">
           <table className="table table-zebra">
             <thead>
               <tr>
-                <th className="w-24">Preview</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Slug</th>
-                <th>Price</th>
-                <th>Active</th>
+                <th className={`w-24 ${thClass}`}>Preview</th>
+                <th className={thClass}>Name</th>
+                <th className={thClass}>Category</th>
+                <th className={thClass}>Slug</th>
+                <th className={thClass}>Price</th>
+                <th className={thClass}>Active</th>
                 <th />
               </tr>
             </thead>
@@ -73,7 +82,7 @@ function AdminProductsPage() {
               {products.map((p) => (
                 <tr key={p.id}>
                   <td className="align-middle">
-                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-base-300 bg-base-200 shadow-sm ring-1 ring-base-300/50 sm:h-18 sm:w-18">
+                    <div className="relative h-14 w-14 shrink-0 overflow-hidden border-2 border-base-300 bg-base-200 sm:h-18 sm:w-18">
                       {p.imageUrl ? (
                         <img
                           src={imageKitOptimizedUrl(p.imageUrl, IK_PRESETS.adminThumb)}
@@ -83,23 +92,31 @@ function AdminProductsPage() {
                           decoding="async"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-base-300 to-base-200">
-                          <PackageIcon className="size-6 text-base-content/35" aria-hidden />
+                        <div className="flex h-full w-full items-center justify-center text-base-content/35">
+                          <span className="font-mono text-[10px] uppercase">n/a</span>
                         </div>
                       )}
                     </div>
                   </td>
                   <td className="font-medium">{p.name}</td>
                   <td>
-                    <span className="badge badge-ghost badge-sm">{p.category ?? "-"}</span>
+                    <span className="badge badge-ghost badge-sm font-mono uppercase tracking-widest">
+                      {p.category ?? "-"}
+                    </span>
                   </td>
                   <td className="font-mono text-sm opacity-80">{p.slug}</td>
-                  <td>{formatPrice(p.priceCents, p.currency)}</td>
+                  <td className="font-mono text-sm font-bold tabular-nums">
+                    {formatPrice(p.priceCents, p.currency)}
+                  </td>
                   <td>
                     {p.active ? (
-                      <span className="badge badge-success badge-sm">yes</span>
+                      <span className="badge badge-success badge-sm font-mono uppercase tracking-widest">
+                        yes
+                      </span>
                     ) : (
-                      <span className="badge badge-ghost badge-sm">no</span>
+                      <span className="badge badge-ghost badge-sm font-mono uppercase tracking-widest">
+                        no
+                      </span>
                     )}
                   </td>
                   <td>
@@ -139,8 +156,10 @@ function AdminProductsPage() {
       )}
 
       <dialog className={`modal ${modalOpen ? "modal-open" : ""}`}>
-        <div className="modal-box max-w-lg">
-          <h3 className="text-lg font-bold">{editing ? "Edit product" : "New product"}</h3>
+        <div className="modal-box max-w-lg border-2 border-base-300">
+          <h3 className="font-mono text-sm font-bold uppercase tracking-[0.25em]">
+            {editing ? "Edit product" : "New product"}
+          </h3>
 
           <AdminProductForm
             key={editing?.id ?? "new"}
@@ -158,7 +177,7 @@ function AdminProductsPage() {
 
         <button
           type="button"
-          className="modal-backdrop bg-neutral/50"
+          className="modal-backdrop bg-neutral/60"
           onClick={() => {
             setModalOpen(false);
             setEditing(null);

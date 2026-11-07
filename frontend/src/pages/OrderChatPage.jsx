@@ -5,7 +5,6 @@ import { useOrderChatPage } from "../hooks/useOrderChatPage.js";
 import {
   Chat,
   Channel,
-  ChannelHeader,
   MessageList,
   MessageComposer,
   Thread,
@@ -16,7 +15,11 @@ function OrderChatPage() {
   const { paid, client, error, channel, canInvite, inviteMutation } = useOrderChatPage();
 
   if (!paid) {
-    return <p className="text-base-content/60">Complete payment to open support chat.</p>;
+    return (
+      <p className="font-mono text-xs uppercase tracking-[0.2em] text-base-content/60">
+        Complete payment to open support chat.
+      </p>
+    );
   }
   if (error) {
     return <PageError message={error} />;
@@ -27,26 +30,26 @@ function OrderChatPage() {
 
   return (
     <div className="space-y-4 text-left">
-      <div className="card border border-base-300 bg-base-100 shadow-sm">
-        <div className="card-body flex-row flex-wrap items-start gap-4">
-          <div className="avatar placeholder">
-            <div className="w-12 rounded-box bg-primary/20 text-primary flex items-center justify-center">
-              <HeadphonesIcon className="size-6" aria-hidden />
-            </div>
+      <div className="border-2 border-base-300 bg-base-100">
+        <div className="flex flex-wrap items-start gap-4 p-5">
+          <div className="flex size-12 shrink-0 items-center justify-center bg-primary text-primary-content">
+            <HeadphonesIcon className="size-6" aria-hidden />
           </div>
 
           <div className="flex-1">
-            <h3 className="card-title text-base">Message support</h3>
-            <p className="text-sm text-base-content/70">
+            <h3 className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-base-content">
+              Message support
+            </h3>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-base-content/70">
               Ask about this order, shipping, or returns. Support can send a video call link here
               when needed; both sides use the same Join button.
             </p>
 
             {canInvite ? (
-              <div className="mt-3 flex flex-wrap items-center gap-2">
+              <div className="mt-3 flex flex-wrap items-center gap-3">
                 <button
                   type="button"
-                  className="btn btn-secondary btn-sm gap-2"
+                  className="btn-brutal inline-flex items-center gap-2 border-2 border-secondary bg-secondary px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-secondary-content hover:bg-transparent hover:text-secondary"
                   disabled={inviteMutation.isPending}
                   onClick={() => inviteMutation.mutate()}
                 >
@@ -59,11 +62,15 @@ function OrderChatPage() {
                 </button>
 
                 {inviteMutation.isError ? (
-                  <span className="text-sm text-error">Could not send invite.</span>
+                  <span className="font-mono text-[11px] uppercase tracking-widest text-error">
+                    Could not send invite.
+                  </span>
                 ) : null}
 
                 {inviteMutation.isSuccess ? (
-                  <span className="text-sm text-success">Invite sent.</span>
+                  <span className="font-mono text-[11px] uppercase tracking-widest text-success">
+                    Invite sent.
+                  </span>
                 ) : null}
               </div>
             ) : null}
@@ -71,7 +78,7 @@ function OrderChatPage() {
         </div>
       </div>
 
-      <div className="stream-panel h-140 overflow-hidden rounded-box border border-neutral-700 bg-neutral-950 [&_.str-chat\_\_main-panel]:min-h-0">
+      <div className="stream-panel h-140 overflow-hidden border-2 border-base-300 bg-neutral-950 [&_.str-chat\_\_main-panel]:min-h-0">
         <Chat client={client} theme="messaging str-chat__theme-dark">
           <Channel channel={channel}>
             <MessageList />
@@ -83,4 +90,5 @@ function OrderChatPage() {
     </div>
   );
 }
+
 export default OrderChatPage;

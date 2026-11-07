@@ -1,72 +1,97 @@
 import { Link } from "react-router";
-import { HeadphonesIcon, TruckIcon } from "lucide-react";
+import { HeadphonesIcon, RadioIcon } from "lucide-react";
+
+const YEAR = new Date().getFullYear();
+
+const columns = [
+  {
+    index: "01",
+    title: "Shop",
+    links: [
+      { to: "/", label: "All products" },
+      { to: "/cart", label: "Cart" },
+      { to: "/orders", label: "Orders" },
+    ],
+  },
+  {
+    index: "02",
+    title: "Support",
+    links: [{ to: "/orders", label: "Order chat" }],
+    note: "After payment, open your order to chat. Video links are shared in that thread.",
+  },
+  {
+    index: "03",
+    title: "Company",
+    links: [{ to: "/#catalog", label: "Catalog" }],
+    note: "Built for people who care about clear specs, fast fulfillment, and human support.",
+  },
+];
 
 export default function Footer() {
   return (
-    <footer className="border-t border-base-300 bg-base-100">
-      <div className="mx-auto max-w-7xl px-4 py-12 md:px-6">
-        <div className="grid gap-10 md:grid-cols-4">
-          <div>
-            <div className="flex items-center gap-2 font-semibold text-base-content">
-              <TruckIcon className="size-8 text-primary" aria-hidden />
+    <footer className="border-t-2 border-base-300 bg-base-100">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <div className="grid divide-y-2 divide-base-300 md:grid-cols-4 md:divide-x-2 md:divide-y-0">
+          <div className="py-8 md:pr-6">
+            <div className="flex items-center gap-2 font-mono text-sm font-bold uppercase tracking-tight text-base-content">
+              <span className="flex size-7 items-center justify-center bg-primary text-primary-content">
+                <RadioIcon className="size-4" aria-hidden />
+              </span>
               NovaMart Supply
             </div>
-            <p className="mt-3 text-sm leading-relaxed text-base-content/65">
-              Curated hardware and workspace tools. Paid orders include priority support; chat with
-              our team and join a video call when we share a link.
+            <p className="mt-4 text-sm leading-relaxed text-base-content/60">
+              Curated hardware and workspace tools. Paid orders include priority support — chat
+              with the team and join a video call when we share a link.
+            </p>
+            <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.25em] text-base-content/35">
+              Est. — shipping worldwide
             </p>
           </div>
 
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-base-content/50">
-              Shop
-            </h3>
-            <ul className="mt-3 space-y-2 text-sm">
-              <li>
-                <Link to="/" className="link link-hover text-base-content/80">
-                  All products
-                </Link>
-              </li>
-              <li>
-                <Link to="/cart" className="link link-hover text-base-content/80">
-                  Cart
-                </Link>
-              </li>
-              <li>
-                <Link to="/orders" className="link link-hover text-base-content/80">
-                  Orders
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {columns.map((col) => (
+            <div key={col.title} className="py-8 md:px-6">
+              <h3 className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary">
+                {col.index} — {col.title}
+              </h3>
 
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-base-content/50">
-              Support
-            </h3>
-            <ul className="mt-3 space-y-2 text-sm text-base-content/70">
-              <li className="flex items-start gap-2">
-                <HeadphonesIcon className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
-                <span>Order-scoped chat after payment; video links shared in-thread.</span>
-              </li>
-            </ul>
-          </div>
+              {col.links?.length ? (
+                <ul className="mt-4 space-y-2 text-sm">
+                  {col.links.map((l) => (
+                    <li key={l.to + l.label}>
+                      <Link
+                        to={l.to}
+                        className="font-medium uppercase tracking-wide text-base-content/80 transition-colors hover:text-primary"
+                      >
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
 
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-base-content/50">
-              Company
-            </h3>
-            <p className="mt-3 text-sm text-base-content/65">
-              Built for teams who care about clear specs, fast fulfillment, and human support when
-              it matters.
-            </p>
-          </div>
+              {col.note ? (
+                <p className="mt-4 flex items-start gap-2 text-sm leading-relaxed text-base-content/55">
+                  {col.title === "Support" ? (
+                    <HeadphonesIcon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
+                  ) : null}
+                  <span>{col.note}</span>
+                </p>
+              ) : null}
+            </div>
+          ))}
         </div>
 
-        <div className="mt-10 space-y-4 border-t border-base-300 pt-6">
-          <p className="text-center text-xs text-base-content/50">
-            © {new Date().getFullYear()} NovaMart Supply · All prices in USD
+        {/* oversized ghost wordmark */}
+        <div className="overflow-hidden border-t-2 border-base-300 py-6 md:py-8">
+          <p className="select-none text-center text-[clamp(3rem,13vw,10rem)] font-bold uppercase leading-none tracking-tighter text-base-300">
+            NovaMart
           </p>
+        </div>
+
+        <div className="flex flex-col gap-2 border-t-2 border-base-300 py-4 font-mono text-[10px] uppercase tracking-[0.25em] text-base-content/45 sm:flex-row sm:items-center sm:justify-between">
+          <span>© {YEAR} NovaMart Supply</span>
+          <span>All prices in USD</span>
+          <span className="text-primary">Built for the desk</span>
         </div>
       </div>
     </footer>

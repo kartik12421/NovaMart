@@ -197,7 +197,7 @@ export function AdminProductForm({ initial, saving, error, getToken, onCancel, o
           </span>
         ) : null}
         {imageUrl ? (
-          <div className="mt-2 overflow-hidden rounded-lg border border-base-300 bg-base-200 p-2">
+          <div className="mt-2 overflow-hidden border-2 border-base-300 bg-base-200 p-2">
             <img
               src={imageKitOptimizedUrl(imageUrl, IK_PRESETS.formPreview)}
               alt=""

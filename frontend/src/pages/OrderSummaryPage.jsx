@@ -7,37 +7,37 @@ function OrderSummaryPage() {
   const { order, items } = useOutletContext();
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-md">
-      <div className="border-b border-base-300 bg-base-200/40 px-5 py-4 sm:px-6">
-        <h2 className="flex items-center gap-2 text-lg font-bold text-base-content">
-          <ListOrderedIcon className="size-5 text-primary" aria-hidden />
+    <div className="border-2 border-base-300 bg-base-100">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-base-300 bg-base-200/60 px-5 py-3 sm:px-6">
+        <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-base-content">
+          <ListOrderedIcon className="size-4 text-primary" aria-hidden />
           Line items
         </h2>
-        <p className="mt-1 text-sm text-base-content/60">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-base-content/45">
           {items.length} {items.length === 1 ? "product" : "products"} in this order
         </p>
       </div>
 
-      <ul className="divide-y divide-base-300">
+      <ul className="divide-y-2 divide-base-300">
         {items.map((row) => (
           <li key={row.id} className="px-4 py-5 sm:px-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6 sm:justify-between">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
               <div className="flex flex-1 gap-4">
                 <Link
                   to={`/product/${row.product.slug}`}
-                  className="group/img relative shrink-0 overflow-hidden rounded-xl border border-base-300 bg-base-200 shadow-sm ring-1 ring-base-300/30 transition hover:ring-primary/40"
+                  className="group/img relative shrink-0 overflow-hidden border-2 border-base-300 bg-base-200 transition-colors group-hover/img:border-primary"
                 >
                   <div className="h-24 w-24 sm:h-28 sm:w-28">
                     {row.product.imageUrl ? (
                       <img
                         src={imageKitOptimizedUrl(row.product.imageUrl, IK_PRESETS.orderLineThumb)}
                         alt=""
-                        className="h-full w-full object-cover transition duration-300 group-hover/img:scale-[1.03]"
+                        className="h-full w-full object-cover grayscale-[0.4] transition duration-300 group-hover/img:grayscale-0"
                         loading="lazy"
                         decoding="async"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-base-300 to-base-200">
+                      <div className="flex h-full w-full items-center justify-center">
                         <PackageIcon className="size-10 text-base-content/30" aria-hidden />
                       </div>
                     )}
@@ -47,26 +47,28 @@ function OrderSummaryPage() {
                 <div className="min-w-0 flex-1">
                   <Link
                     to={`/product/${row.product.slug}`}
-                    className="link link-hover text-lg font-semibold leading-snug text-base-content"
+                    className="text-base font-bold uppercase leading-snug tracking-tight text-base-content transition-colors hover:text-primary sm:text-lg"
                   >
                     {row.product.name}
                   </Link>
                   {row.product.category ? (
-                    <p className="mt-1 text-sm text-base-content/55">{row.product.category}</p>
+                    <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-base-content/50">
+                      {row.product.category}
+                    </p>
                   ) : null}
-                  <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-base-content/65">
+                  <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.12em] text-base-content/60">
                     <span>Qty {row.quantity}</span>
-                    <span className="text-base-content/40">·</span>
+                    <span className="text-base-content/30">·</span>
                     <span>{formatPrice(row.unitPriceCents, row.product.currency)} each</span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex shrink-0 flex-col border-t border-base-300 pt-3 sm:border-t-0 sm:pt-0 sm:text-right">
-                <span className="text-xs font-medium uppercase tracking-wide text-base-content/45">
+              <div className="flex shrink-0 flex-col border-t-2 border-base-300 pt-3 sm:border-t-0 sm:pt-0 sm:text-right">
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-base-content/45">
                   Subtotal
                 </span>
-                <span className="text-xl font-bold tabular-nums text-base-content">
+                <span className="font-mono text-xl font-bold tabular-nums text-base-content">
                   {formatPrice(row.unitPriceCents * row.quantity, row.product.currency)}
                 </span>
               </div>
@@ -75,9 +77,11 @@ function OrderSummaryPage() {
         ))}
       </ul>
 
-      <div className="flex items-center justify-between gap-4 border-t border-base-300 bg-base-200/50 px-5 py-5 sm:px-6">
-        <span className="text-lg font-semibold text-base-content">Total</span>
-        <span className="text-2xl font-bold tabular-nums text-primary">
+      <div className="flex items-center justify-between gap-4 border-t-2 border-base-300 bg-base-200/60 px-5 py-4 sm:px-6">
+        <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-base-content">
+          Total
+        </span>
+        <span className="font-mono text-2xl font-bold tabular-nums text-primary">
           {formatPrice(order.totalCents, "usd")}
         </span>
       </div>

@@ -13,7 +13,7 @@ export function OrderPreview({ items, size = "md" }) {
   if (!items?.length) {
     return (
       <div
-        className={`flex shrink-0 items-center justify-center rounded-2xl border border-dashed border-base-300 bg-base-200/60 ${box}`}
+        className={`flex shrink-0 items-center justify-center border-2 border-dashed border-base-300 bg-base-200/60 ${box}`}
       >
         <PackageIcon
           className={size === "lg" ? "size-12 text-base-content/25" : "size-8 text-base-content/25"}
@@ -27,7 +27,7 @@ export function OrderPreview({ items, size = "md" }) {
     const p = items[0];
     return (
       <div
-        className={`relative shrink-0 overflow-hidden rounded-2xl border border-base-300 bg-base-200 shadow-md ring-1 ring-base-300/40 ${box}`}
+        className={`relative shrink-0 overflow-hidden border-2 border-base-300 bg-base-200 ${box}`}
       >
         {p.imageUrl ? (
           <img
@@ -38,7 +38,7 @@ export function OrderPreview({ items, size = "md" }) {
             decoding="async"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-base-300 to-base-200">
+          <div className="flex h-full w-full items-center justify-center">
             <PackageIcon
               className={
                 size === "lg" ? "size-12 text-base-content/25" : "size-8 text-base-content/25"
@@ -57,13 +57,10 @@ export function OrderPreview({ items, size = "md" }) {
 
   return (
     <div
-      className={`grid shrink-0 grid-cols-2 grid-rows-2 gap-0.5 overflow-hidden rounded-2xl border border-base-300 bg-base-200/90 p-0.5 shadow-md ring-1 ring-base-300/40 ${box}`}
+      className={`grid shrink-0 grid-cols-2 grid-rows-2 gap-0.5 overflow-hidden border-2 border-base-300 bg-base-300 p-0.5 ${box}`}
     >
       {show.map((p, i) => (
-        <div
-          key={`${p.slug}-${i}`}
-          className="relative min-h-0 overflow-hidden rounded-md bg-base-300"
-        >
+        <div key={`${p.slug}-${i}`} className="relative min-h-0 overflow-hidden bg-base-200">
           {p.imageUrl ? (
             <img
               src={imageKitOptimizedUrl(p.imageUrl, ikPreset)}
@@ -78,7 +75,7 @@ export function OrderPreview({ items, size = "md" }) {
             </div>
           )}
           {i === cap - 1 && rest > 0 ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-neutral/90 text-sm font-bold tabular-nums text-neutral-content">
+            <div className="absolute inset-0 flex items-center justify-center bg-primary/90 font-mono text-sm font-bold tabular-nums text-primary-content">
               +{rest}
             </div>
           ) : null}

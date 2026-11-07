@@ -307,8 +307,10 @@ export function SentryDemoPage() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <p className="text-sm font-medium uppercase tracking-wide text-primary">Observability</p>
-      <h1 className="mt-1 text-3xl font-semibold tracking-tight text-base-content">
+      <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary">
+        06 / Observability
+      </p>
+      <h1 className="mt-2 text-3xl font-bold uppercase leading-none tracking-tight">
         Sentry demo events
       </h1>
       <p className="mt-3 text-base leading-relaxed text-base-content/70">

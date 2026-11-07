@@ -1,45 +1,50 @@
-import { CreditCardIcon, HeadphonesIcon, ShieldCheckIcon, TruckIcon } from "lucide-react";
+import {
+  CreditCardIcon,
+  HeadphonesIcon,
+  ShieldCheckIcon,
+  TruckIcon,
+  WrenchIcon,
+  PackageCheckIcon,
+} from "lucide-react";
 
 const items = [
-  {
-    icon: TruckIcon,
-    title: "Fulfillment",
-    desc: "Structured catalog & inventory-ready model",
-  },
-  {
-    icon: ShieldCheckIcon,
-    title: "Secure pay",
-    desc: "Encrypted payments and order confirmation",
-  },
-  {
-    icon: CreditCardIcon,
-    title: "Transparent",
-    desc: "Prices in USD, tax where applicable",
-  },
-  {
-    icon: HeadphonesIcon,
-    title: "Human support",
-    desc: "Order-scoped chat + optional video",
-  },
+  { icon: TruckIcon, label: "Same-week fulfillment" },
+  { icon: ShieldCheckIcon, label: "Encrypted checkout" },
+  { icon: CreditCardIcon, label: "Prices in USD" },
+  { icon: HeadphonesIcon, label: "Order-page support chat" },
+  { icon: WrenchIcon, label: "Specs listed, no filler" },
+  { icon: PackageCheckIcon, label: "Stock counted daily" },
 ];
+
+function Row({ hidden = false }) {
+  return (
+    <div
+      className="flex shrink-0 items-center gap-8 pr-8"
+      aria-hidden={hidden ? "true" : undefined}
+    >
+      {items.map(({ icon: IconCmp, label }) => (
+        <span key={label} className="flex items-center gap-2.5 whitespace-nowrap">
+          <IconCmp className="size-4 text-primary" aria-hidden />
+          {label}
+          <span className="text-base-content/25" aria-hidden>
+            ◆
+          </span>
+        </span>
+      ))}
+    </div>
+  );
+}
 
 export function TrustStrip() {
   return (
-    <section className="grid gap-4 rounded-box border border-base-300 bg-base-100 p-6 sm:grid-cols-2 lg:grid-cols-4">
-      {items.map(({ icon, title, desc }) => {
-        const IconCmp = icon;
-        return (
-          <div key={title} className="flex gap-3">
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <IconCmp className="size-5" aria-hidden />
-            </div>
-            <div>
-              <h3 className="font-semibold text-base-content">{title}</h3>
-              <p className="mt-0.5 text-sm text-base-content/65">{desc}</p>
-            </div>
-          </div>
-        );
-      })}
+    <section
+      aria-label="Store highlights"
+      className="ticker overflow-hidden border-2 border-base-300 bg-base-200/60 py-3"
+    >
+      <div className="flex w-max animate-marquee font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-base-content/70">
+        <Row />
+        <Row hidden />
+      </div>
     </section>
   );
 }
