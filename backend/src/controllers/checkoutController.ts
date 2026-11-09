@@ -4,9 +4,9 @@ import z from "zod";
 import { getAuth } from "@clerk/express";
 import { getLocalUser } from "../lib/users.js";
 import { db } from "../db/index.js";
-import { CheckoutSessionLine, checkoutSessions, products } from "../db/schema.js";
+import { CheckoutSessionLine, checkoutSessions, orderItems, orders, products } from "../db/schema.js";
 import { and, eq, inArray } from "drizzle-orm";
-import { polarCreateCheckout } from "../lib/polar.js";
+import { polarCreateCheckout, polarGetCheckout } from "../lib/polar.js";
 
 const env = getEnv();
 
@@ -75,9 +75,10 @@ export async function createCheckout(req: Request, res: Response, next: NextFunc
       });
     }
 
-    if (totalCents < 10) {
+    // Polar rejects ad-hoc prices below the per-currency minimum ($0.50 for USD).
+    if (totalCents < 50) {
       res.status(400).json({
-        error: "Total below Polar minimum (e.g. USD requires at least 10 cents)",
+        error: "Total below Polar minimum (USD requires at least 50 cents)",
       });
       return;
     }
@@ -97,6 +98,8 @@ export async function createCheckout(req: Request, res: Response, next: NextFunc
 
     const checkout = await polarCreateCheckout(env, {
       products: [env.POLAR_CHECKOUT_PRODUCT_ID],
+      // Match the Polar organization's USD presentment currency.
+      currency: "usd",
       prices: {
         [env.POLAR_CHECKOUT_PRODUCT_ID]: [
           {
@@ -119,6 +122,110 @@ export async function createCheckout(req: Request, res: Response, next: NextFunc
       .where(eq(checkoutSessions.id, session.id));
 
     res.json({ checkoutUrl: checkout.url });
+  } catch (e) {
+    next(e);
+  }
+}
+
+export async function confirmCheckout(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { userId, isAuthenticated } = getAuth(req);
+    if (!isAuthenticated || !userId) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const localUser = await getLocalUser(userId);
+    if (!localUser) {
+      res.status(503).json({ error: "Account not synced yet" });
+      return;
+    }
+
+    const checkoutId = req.params.id as string;
+    const [session] = await db
+      .select()
+      .from(checkoutSessions)
+      .where(eq(checkoutSessions.polarCheckoutId, checkoutId))
+      .limit(1);
+
+    if (!session || session.userId !== localUser.id) {
+      const [existingOrder] = await db
+        .select()
+        .from(orders)
+        .where(and(eq(orders.polarCheckoutId, checkoutId), eq(orders.userId, localUser.id)))
+        .limit(1);
+
+      if (existingOrder) {
+        res.json({ status: "paid", orderId: existingOrder.id });
+        return;
+      }
+
+      res.status(404).json({ error: "Checkout not found" });
+      return;
+    }
+
+    const checkout = await polarGetCheckout(env, checkoutId);
+    if (
+      checkout.id !== checkoutId ||
+      checkout.external_customer_id !== userId ||
+      checkout.metadata?.checkout_session_id !== session.id
+    ) {
+      res.status(403).json({ error: "Checkout does not match this account" });
+      return;
+    }
+
+    if (checkout.status !== "succeeded") {
+      res.json({ status: checkout.status === "failed" || checkout.status === "expired" ? "failed" : "pending" });
+      return;
+    }
+
+    const result = await db.transaction(async (tx) => {
+      const [lockedSession] = await tx
+        .select()
+        .from(checkoutSessions)
+        .where(eq(checkoutSessions.id, session.id))
+        .for("update");
+
+      if (!lockedSession) {
+        const [existingOrder] = await tx
+          .select()
+          .from(orders)
+          .where(and(eq(orders.polarCheckoutId, checkoutId), eq(orders.userId, localUser.id)))
+          .limit(1);
+        return existingOrder ? { orderId: existingOrder.id } : null;
+      }
+
+      const [order] = await tx
+        .insert(orders)
+        .values({
+          userId: lockedSession.userId,
+          status: "paid",
+          totalCents: lockedSession.totalCents,
+          polarCheckoutId: checkoutId,
+        })
+        .returning();
+
+      if (lockedSession.lines.length) {
+        await tx.insert(orderItems).values(
+          lockedSession.lines.map((line) => ({
+            orderId: order.id,
+            productId: line.productId,
+            quantity: line.quantity,
+            unitPriceCents: line.unitPriceCents,
+          })),
+        );
+      }
+
+      await tx.delete(checkoutSessions).where(eq(checkoutSessions.id, lockedSession.id));
+      return { orderId: order.id };
+    });
+
+    if (!result) {
+      res.status(500).json({ error: "Could not create order for completed checkout" });
+      return;
+    }
+
+    res.json({ status: "paid", orderId: result.orderId });
   } catch (e) {
     next(e);
   }

@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { createCheckout } from "../controllers/checkoutController.js";
+import { confirmCheckout, createCheckout } from "../controllers/checkoutController.js";
 
 const router = Router();
 
 router.post("/", createCheckout);
+router.get("/:id/status", confirmCheckout);
 
 export default router;

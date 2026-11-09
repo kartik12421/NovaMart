@@ -10,6 +10,8 @@ type CheckoutCreateBody = {
       price_currency: string;
     }>
   >;
+  /** Presentment currency the customer is charged in. */
+  currency?: string;
   success_url: string;
   return_url?: string;
   external_customer_id?: string;
@@ -37,4 +39,25 @@ export async function polarCreateCheckout(env: Env, body: CheckoutCreateBody) {
 
   const data = (await res.json()) as { id: string; url: string };
   return { id: data.id, url: data.url };
+}
+
+export async function polarGetCheckout(env: Env, checkoutId: string) {
+  const token = env.POLAR_ACCESS_TOKEN;
+  if (!token) throw new Error("POLAR_ACCESS_TOKEN is not configured");
+
+  const res = await fetch(`${env.POLAR_API_BASE}/v1/checkouts/${encodeURIComponent(checkoutId)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Polar checkout lookup failed: ${res.status} ${errText}`);
+  }
+
+  return (await res.json()) as {
+    id: string;
+    status: "open" | "expired" | "confirmed" | "succeeded" | "failed";
+    metadata?: Record<string, unknown>;
+    external_customer_id?: string | null;
+  };
 }
