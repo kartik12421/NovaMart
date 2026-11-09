@@ -7,7 +7,6 @@ import {
   Channel,
   MessageList,
   MessageComposer,
-  Thread,
 } from "stream-chat-react";
 import "stream-chat-react/dist/css/index.css";
 
@@ -82,7 +81,6 @@ function OrderChatPage() {
         <Chat client={client} theme="messaging str-chat__theme-dark">
           <Channel channel={channel}>
             <MessageList />
-            <Thread />
             <MessageComposer />
           </Channel>
         </Chat>
